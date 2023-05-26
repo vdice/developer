@@ -30,7 +30,7 @@ permissions:
 
 env:
   OCI_REGISTRY: index.docker.io
-  OCI_IMAGE_NAME: fermyon/developer
+  OCI_IMAGE_NAME: vdice/developer
 
 jobs:
   echo-inputs:
@@ -45,7 +45,7 @@ jobs:
 
   publish:
       runs-on: ubuntu-latest
-      if: ${{ github.repository_owner == 'fermyon' }}
+      # if: ${{ github.repository_owner == 'fermyon' }}
       outputs:
         oci_ref: ${{ env.OCI_REGISTRY }}/${{ env.OCI_IMAGE_NAME }}@${{ steps.push.outputs.digest }}
       steps:
@@ -90,7 +90,7 @@ jobs:
           uses: fermyon/actions/spin/push@v1
           with:
             registry: ${{ env.OCI_REGISTRY }}
-            registry_username: fermyon
+            registry_username: vdice
             registry_password: ${{ secrets.DOCKERHUB_PAT }}
             registry_reference: ${{ env.OCI_REGISTRY }}/${{ env.OCI_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
@@ -98,6 +98,14 @@ jobs:
           if: ${{ always() }}
           run: |
             rm -rf /home/runner/fermyon
+
+  test:
+    runs-on: ubuntu-latest
+    needs: publish
+    steps:
+      - name: echo oci_ref
+        run: |
+          echo "${{ needs.publish.outputs.oci_ref }}"
 
   deploy:
     runs-on: ubuntu-latest
