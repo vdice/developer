@@ -360,5 +360,5 @@ environment = { PREVIEW_MODE = "0" }
 files = ["content/**/*", "templates/*", "scripts/*", "config/*", "shortcodes/*"]
 
 [component.bartholomew-spin-v2.build]
-command = "npm run build-index && npm run build-hub-index"
+command = "npm run update-latest-version && npm run build-index && npm run build-hub-index"
 watch = ["content/**/*", "templates/*"]
